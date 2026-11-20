@@ -1,0 +1,89 @@
+version: 2
+models:
+  - name: dim_customer_eco
+    description: "Eco Essentials Customer Dimension"
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+  - name: dim_product_eco
+    description: "Eco Essentials Product Dimension"
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+  - name: dim_campaign_eco
+    description: "Eco Essentials Campaign Dimension"
+    columns:
+      - name: campaign_id
+        tests:
+          - unique
+          - not_null
+  - name: dim_order_eco
+    description: "Eco Essentials Order Dimension"
+    columns:
+      - name: order_key
+        tests:
+          - unique
+          - not_null
+  - name: dim_email_eco
+    description: "Eco Essentials Email Dimension"
+    columns:
+      - name: email_key
+        tests:
+          - unique
+          - not_null
+  - name: dim_event_type_eco
+    description: "Eco Essentials Event Type Dimension"
+    columns:
+      - name: event_type_key
+        tests:
+          - unique
+          - not_null
+      - name: event_type
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CLICK', 'OPEN', 'SENT']
+  - name: dim_date_eco
+    description: "Eco Essentials Date Dimension"
+    columns:
+      - name: day_of_week
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+                  - 6
+                  - 7
+  - name: fact_sales_eco
+    description: "Eco Essentials Sales Fact"
+    columns:
+      - name: order_key
+        description: "A foreign key to the order dimension"
+        tests:
+          - not_null
+          - unique
+  - name: fact_email_event_eco
+    description: "Eco Essentials Email Event Fact"
+    columns:
+      - name: event_type_key
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_event_type_eco') # the model you want to compare to
+                field: event_type_key # the field on the model you want to compare to
+  - name: sales_eco
+    description: "Eco Essentials Sales Reporting Model"
+    columns: 
+      - name: product_key
+        tests:
+          - not_null
+          - unique
